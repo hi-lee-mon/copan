@@ -31,6 +31,7 @@
 | [要件定義書](./docs/requirements.md) | コンセプト、ターゲット、やらないこと、MVP機能一覧、ユーザーストーリー、設計方針、非機能要件 |
 | [技術選定ガイド](./docs/tech-decision-guide.md) | 何を決める必要があるか、それぞれの判断観点、決定の順序、決定済み／未決の一覧 |
 | [ADR（意思決定の記録）](./adr/) | 個々の決定と、その理由・却下案・トレードオフ |
+| [チケット](./docs/tickets/) | 実装を進める単位。目的・背景・事前調査・学習TODO・完了条件 |
 
 **まず読むなら**: [要件定義書](./docs/requirements.md) → [技術選定ガイド](./docs/tech-decision-guide.md) の順。
 
@@ -88,16 +89,20 @@
 
 ## 次にやること
 
-1. **商標・ドメインの実査**（J-PlatPat で「コパン」「COPAN」を第9類・第42類、`copan.app` 等の空き確認）
-2. スキャフォールド（モノレポの骨組み → TypeSpec で `/health` を定義 → Go 側を TDD で実装 → CI）
-3. DB設計（ER図）
-4. 認証
-5. v0.1 の投稿機能
+**[チケット一覧](./docs/tickets/) で管理している。** 直近は以下。
+
+1. [001](./docs/tickets/001-trademark-domain-research.md) 商標・ドメインの実査（**最優先**）
+2. [002](./docs/tickets/002-monorepo-scaffold.md) モノレポの骨組み
+3. [003](./docs/tickets/003-go-api-skeleton.md) Go の API 雛形とローカル実行
+
+スキャフォールドのゴールは「**本番URLの `/health` が 200 を返す**」こと。その先は DB設計 → 認証 → v0.1 の投稿機能。
 
 ---
 
 ## 開発上の約束
 
+- 実装は**開発者本人**が書く。AIはチケット作成・ヒント・レビューに徹する（[ADR 20260812-0905](./adr/20260812-0905-development-workflow.md)）
+- 作業は**チケット単位**で進める
 - 実装は **TDD** で進める
 - コードには `How`、テストコードには `What`、コミットログには `Why`、コードコメントには `Why not` を書く
 - **意思決定をしたら `adr/<yyyymmdd-hhmm>-<name>.md` を作成する**

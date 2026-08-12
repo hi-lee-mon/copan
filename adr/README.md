@@ -45,6 +45,7 @@
 | [2026-08-12 06:59](./20260812-0659-backend-go-openapi-contract.md) | バックエンドを Go とし、型共有を TypeSpec 起点の OpenAPI で行う | 承認 |
 | [2026-08-12 07:12](./20260812-0712-infrastructure-cloudflare-aws-hybrid.md) | インフラを Cloudflare（配信層）＋ AWS Lambda（計算層）で構成する | 承認（データ層のみ下記で更新） |
 | [2026-08-12 08:05](./20260812-0805-database-neon-then-planetscale.md) | DBは Neon で開始し、v1.0公開前に東京リージョンのPostgresへ移行する | 承認 |
+| [2026-08-12 09:05](./20260812-0905-development-workflow.md) | 実装は開発者本人が行い、Claude Code はチケット作成と支援に徹する | 承認 |
 
 ## 決定の連鎖
 
