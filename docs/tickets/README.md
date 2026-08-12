@@ -26,7 +26,7 @@
 
 | # | 内容 | 見積 | ステータス |
 | --- | --- | --- | --- |
-| [001](./001-trademark-domain-research.md) | 「コパン／COPAN」の商標・ドメインを実査し、名称を確定する | 2h | 未着手 |
+| [001](./001-trademark-domain-research.md) | 「コパン／COPAN」の商標を実査し、実装を進めてよいか判断する | 1.5h | 進行中 |
 | [002](./002-monorepo-scaffold.md) | Turborepo のモノレポ骨組みを作る | 3h | 未着手 |
 | [003](./003-go-api-skeleton.md) | Go の API 雛形を作り、ローカルで叩ける状態にする | 3h | 未着手 |
 | 004 | TypeSpec で `/health` を定義し、OpenAPI を生成する | 2h | 未作成 |
@@ -38,6 +38,7 @@
 
 スキャフォールド完了後に切り出す。
 
+- **名称の最終確定・ドメイン取得・SNS アカウント確保**（v1.0 公開前。001 から繰り延べ）
 - DB設計（ER図、PostGIS のテーブル設計）
 - 認証（[技術選定ガイド E-1 / E-2](../tech-decision-guide.md) が未決）
 - v0.1 の投稿機能
