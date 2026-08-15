@@ -1,9 +1,10 @@
 # 003: Go の API 雛形を作り、ローカルで叩ける状態にする
 
-- ステータス: **進行中**（ステップ1完了 — [ADR 20260815-1420](../adr/20260815-1420-go-version-and-module-path.md)）
+- ステータス: **進行中**（実装ステップ1〜8完了。残りは学習TODOと振り返り）
 - 見積: 3h / 実績: -h
 - 依存: **002（完了）** — `apps/api` のパッケージ境界と turbo のタスク定義がある前提
 - 関連: [ADR 20260812-0712 インフラ構成](../adr/20260812-0712-infrastructure-cloudflare-aws-hybrid.md)、[ADR 20260812-0659 Go採用](../adr/20260812-0659-backend-go-openapi-contract.md)、[ADR 20260812-1305 Go の置き方](../adr/20260812-1305-go-in-turborepo-workspace.md)、[ADR 20260812-1324 バージョン固定](../adr/20260812-1324-version-pinning-and-audit.md)、[ADR 20260814-1826 商標の繰り延べ](../adr/20260814-1826-defer-trademark-research.md)
+- 本チケットで生まれた ADR: [20260815-1420 バージョンとモジュールパス](../adr/20260815-1420-go-version-and-module-path.md)、[20260815-1521 内部構成](../adr/20260815-1521-go-layered-architecture.md)、[20260815-1548 ルーター](../adr/20260815-1548-router-stdlib-servemux.md)、[20260815-1906 Lambda アダプタとランタイム](../adr/20260815-1906-lambda-adapter-and-runtime.md)、[20260815-2314 ビルド成果物と turbo タスク](../adr/20260815-2314-go-build-output-and-turbo-tasks.md)、[20260815-2315 ルーターの置き場所](../adr/20260815-2315-router-placement.md)
 
 ## 1. 目的
 
@@ -166,9 +167,10 @@ func TestPing(t *testing.T) {
 
 - [x] ~~**Go のモジュールパスを決める。**~~ → `github.com/hi-lee-mon/copan/apps/api`（[ADR 20260815-1420](../adr/20260815-1420-go-version-and-module-path.md)）
 - [x] ~~**Go のバージョンをどれにし、`mise.toml` に含めるか。**~~ → `mise.toml` に `go = "1.26.6"`、`go.mod` も `go mod init` の既定値 `1.26.6` のまま（同 ADR）
-- [ ] Lambda アダプタを自前で書くか、既存ライブラリを使うか
-- [ ] Lambda のランタイムに何を使うか（`provided.al2023` 等）とバイナリ名の規約
-- [ ] **`apps/api` の turbo タスク設定** — 成果物の出力先（上記 A / B）、`test` タスクのキャッシュ方針
+- [x] ~~Lambda アダプタを自前で書くか、既存ライブラリを使うか~~ → `aws-lambda-go-api-proxy/httpadapter` の `NewV2`（[ADR 20260815-1906](../adr/20260815-1906-lambda-adapter-and-runtime.md)）
+- [x] ~~Lambda のランタイムに何を使うか（`provided.al2023` 等）とバイナリ名の規約~~ → `provided.al2023` / arm64 / `bootstrap`（同 ADR）
+- [x] ~~**`apps/api` の turbo タスク設定** — 成果物の出力先（上記 A / B）、`test` タスクのキャッシュ方針~~ → **A**（`dist/bootstrap`、`apps/api/turbo.json` は作らない）、`test` はキャッシュ有効のまま（[ADR 20260815-2314](../adr/20260815-2314-go-build-output-and-turbo-tasks.md)）
+- [x] ~~ルーターの組み立てをどこに置くか~~ → `internal/rest/router.go`（[ADR 20260815-2315](../adr/20260815-2315-router-placement.md)）
 
 ## 6. 実装ステップ
 
@@ -191,15 +193,15 @@ func TestPing(t *testing.T) {
 
 ## 7. 完了条件
 
-- [ ] `go test ./...` が通る
-- [ ] `go run ./cmd/local` で起動し、`curl localhost:<port>/ping` が 200 を返す
-- [ ] `go build ./cmd/lambda` が成功する
-- [ ] ローカルと Lambda が同一のハンドラを共有している（実装が二重になっていない）
-- [ ] ルートから `pnpm exec turbo run test` を流すと、Go のテストが実行される
-- [ ] ルートから `pnpm exec turbo run build` を流すと、Go のビルドが実行される
-- [ ] **ビルド成果物を削除してから `turbo run build` を流すと、キャッシュヒット（`FULL TURBO`）した上で成果物が復元される**
-- [ ] `.gitignore` が Go のビルド成果物と整合している（バイナリがコミット対象に入らない）
-- [ ] Go のバージョンとモジュールパスの決定が ADR に残っている
+- [x] `go test ./...` が通る
+- [ ] `go run ./cmd/local` で起動し、`curl localhost:<port>/ping` が 200 を返す（ステップ8の移設後、再確認が必要）
+- [x] `go build ./cmd/lambda` が成功する
+- [x] ローカルと Lambda が同一のハンドラを共有している（実装が二重になっていない）— 両者とも `rest.NewRouter()` を呼ぶ
+- [x] ルートから `pnpm exec turbo run test` を流すと、Go のテストが実行される
+- [x] ルートから `pnpm exec turbo run build` を流すと、Go のビルドが実行される
+- [x] **ビルド成果物を削除してから `turbo run build` を流すと、キャッシュヒット（`FULL TURBO`）した上で成果物が復元される**
+- [x] `.gitignore` が Go のビルド成果物と整合している（バイナリがコミット対象に入らない）— 成果物は `dist/` 配下なので既存の `dist/` 行が効く。`bootstrap` 行は手動ビルド時の保険として残す
+- [x] Go のバージョンとモジュールパスの決定が ADR に残っている
 - [ ] 学習TODOがすべて埋まっている
 
 ## 8. 振り返り（完了時に本人が記入）

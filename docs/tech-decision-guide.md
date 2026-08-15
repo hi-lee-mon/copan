@@ -195,6 +195,8 @@ A-1（フロントのホスティング）は可逆性が高く、後回しで�
 | バックエンドの言語 | **Go** | [20260812-0659](./adr/20260812-0659-backend-go-openapi-contract.md) |
 | G-2'' Go のバージョンとモジュールパス | **`mise.toml` と `go.mod` の両方で 1.26.6（`go mod init` の既定値のまま）、モジュールパスは `github.com/hi-lee-mon/copan/apps/api`** | [20260815-1420](./adr/20260815-1420-go-version-and-module-path.md) |
 | G-9 Go の内部構成 | **`internal/{module}/` のレイヤー分割（domain / usecase / interface / infrastructure）。層は中身ができた時点で追加し、空のディレクトリは作らない。テストは外部テストパッケージ（`package xxx_test`）を既定とする** | [20260815-1521](./adr/20260815-1521-go-layered-architecture.md) |
+| G-9' ルーターの置き場所 | **`internal/rest/router.go`（モジュールの外）。各モジュールはパスを知らず、ハンドラ関数だけを公開する。依存は `rest` → モジュールの一方通行** | [20260815-2315](./adr/20260815-2315-router-placement.md) |
+| G-1''' Go の turbo タスク | **成果物は `apps/api/dist/bootstrap`（`GOOS=linux GOARCH=arm64`）。パッケージ単位の `turbo.json` は作らず、ルートの `outputs: ["dist/**"]` を使う。`test` はキャッシュ有効のまま** | [20260815-2314](./adr/20260815-2314-go-build-output-and-turbo-tasks.md) |
 | A-2' Lambda アダプタとランタイム | **`aws-lambda-go` + `aws-lambda-go-api-proxy/httpadapter`（`NewV2` を Function URL に流用）、`provided.al2023` / arm64、バイナリ名 `bootstrap`** | [20260815-1906](./adr/20260815-1906-lambda-adapter-and-runtime.md) |
 | G-10 HTTP ルーター | **標準の `net/http.ServeMux`（Go 1.22+）。Gin は不採用だが恒久排除ではなく、004 の生成ツール選定と併せて再判断する** | [20260815-1548](./adr/20260815-1548-router-stdlib-servemux.md) |
 | G-3 型共有の方式 | **TypeSpec → OpenAPI → 両側コード生成** | [20260812-0659](./adr/20260812-0659-backend-go-openapi-contract.md) |

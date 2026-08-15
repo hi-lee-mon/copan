@@ -1,15 +1,15 @@
-package handler_test
+package rest_test
 
 import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
-	"github.com/hi-lee-mon/copan/apps/api/internal/health/interface/rest/handler"
+	"github.com/hi-lee-mon/copan/apps/api/internal/rest"
 )
 
 func TestPing(t *testing.T) {
-	h := handler.NewRouter()
+	h := rest.NewRouter()
 	req := httptest.NewRequest(http.MethodGet, "/ping", nil)
 	rec := httptest.NewRecorder()
 

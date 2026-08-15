@@ -46,7 +46,7 @@
 | [2026-08-12 07:12](./20260812-0712-infrastructure-cloudflare-aws-hybrid.md) | インフラを Cloudflare（配信層）＋ AWS Lambda（計算層）で構成する | 承認（データ層のみ下記で更新） |
 | [2026-08-12 08:05](./20260812-0805-database-neon-then-planetscale.md) | DBは Neon で開始し、v1.0公開前に東京リージョンのPostgresへ移行する | 承認 |
 | [2026-08-12 09:05](./20260812-0905-development-workflow.md) | 実装は開発者本人が行い、Claude Code はチケット作成と支援に徹する | 承認 |
-| [2026-08-12 13:05](./20260812-1305-go-in-turborepo-workspace.md) | Go を Turborepo 公式の多言語パターンでワークスペースに含める | 承認 |
+| [2026-08-12 13:05](./20260812-1305-go-in-turborepo-workspace.md) | Go を Turborepo 公式の多言語パターンでワークスペースに含める | 承認（パッケージ単位の `turbo.json` のみ下記で更新） |
 | [2026-08-12 13:09](./20260812-1309-package-manager-pnpm.md) | パッケージマネージャに pnpm を採用する | 承認 |
 | [2026-08-12 13:13](./20260812-1313-monorepo-directory-layout.md) | ディレクトリ構成を `apps/` + `packages/` の2系統とし、パッケージ名を `@repo/*` で揃える | 承認 |
 | [2026-08-12 13:24](./20260812-1324-version-pinning-and-audit.md) | Node.js と pnpm のバージョンを `mise.toml` に集約し、依存を完全固定して CI で `pnpm audit` を強制する | 承認 |
@@ -55,6 +55,8 @@
 | [2026-08-15 15:21](./20260815-1521-go-layered-architecture.md) | Go の内部構成をモジュール単位のレイヤー構造とし、層は中身ができた時点で追加する | 承認 |
 | [2026-08-15 15:48](./20260815-1548-router-stdlib-servemux.md) | HTTP ルーターは標準の `net/http.ServeMux` とし、Gin の採否は 004 と併せて判断する | 承認 |
 | [2026-08-15 19:06](./20260815-1906-lambda-adapter-and-runtime.md) | Lambda アダプタに aws-lambda-go-api-proxy を使い、ランタイムは `provided.al2023` / arm64 とする | 承認 |
+| [2026-08-15 23:14](./20260815-2314-go-build-output-and-turbo-tasks.md) | Go のビルド成果物を `apps/api/dist/bootstrap` に出し、パッケージ単位の `turbo.json` を作らない | 承認 |
+| [2026-08-15 23:15](./20260815-2315-router-placement.md) | HTTP ルーターの組み立てを `internal/rest` に置き、各モジュールはハンドラ関数だけを公開する | 承認 |
 
 ## 決定の連鎖
 

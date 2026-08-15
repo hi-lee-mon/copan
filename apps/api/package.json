@@ -2,8 +2,8 @@
   "name": "@repo/api",
   "private": true,
   "scripts": {
-    "build": "mkdir -p dist && echo built > dist/out.txt",
-    "test": "echo test @repo/api"
+    "build": "mkdir -p dist && GOOS=linux GOARCH=arm64 go build -o dist/bootstrap ./cmd/lambda",
+    "test": "go test ./..."
   },
   "devDependencies": {
     "@repo/api-spec": "workspace:*"
