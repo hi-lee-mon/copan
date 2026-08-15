@@ -193,6 +193,10 @@ A-1（フロントのホスティング）は可逆性が高く、後回しで�
 | G-1'' ディレクトリ構成 | **`apps/`（web・api）+ `packages/`（api-spec・api-client）**、パッケージ名は `@repo/*` | [20260812-1313](./adr/20260812-1313-monorepo-directory-layout.md) |
 | G-2' バージョン固定 | **Node と pnpm は `mise.toml`（CI も `jdx/mise-action` で同じファイルを読む）、`package.json` には turbo が要求する `devEngines.packageManager` を範囲で置く、依存は完全固定 + CI で `pnpm audit`** | [20260812-1324](./adr/20260812-1324-version-pinning-and-audit.md) |
 | バックエンドの言語 | **Go** | [20260812-0659](./adr/20260812-0659-backend-go-openapi-contract.md) |
+| G-2'' Go のバージョンとモジュールパス | **`mise.toml` と `go.mod` の両方で 1.26.6（`go mod init` の既定値のまま）、モジュールパスは `github.com/hi-lee-mon/copan/apps/api`** | [20260815-1420](./adr/20260815-1420-go-version-and-module-path.md) |
+| G-9 Go の内部構成 | **`internal/{module}/` のレイヤー分割（domain / usecase / interface / infrastructure）。層は中身ができた時点で追加し、空のディレクトリは作らない。テストは外部テストパッケージ（`package xxx_test`）を既定とする** | [20260815-1521](./adr/20260815-1521-go-layered-architecture.md) |
+| A-2' Lambda アダプタとランタイム | **`aws-lambda-go` + `aws-lambda-go-api-proxy/httpadapter`（`NewV2` を Function URL に流用）、`provided.al2023` / arm64、バイナリ名 `bootstrap`** | [20260815-1906](./adr/20260815-1906-lambda-adapter-and-runtime.md) |
+| G-10 HTTP ルーター | **標準の `net/http.ServeMux`（Go 1.22+）。Gin は不採用だが恒久排除ではなく、004 の生成ツール選定と併せて再判断する** | [20260815-1548](./adr/20260815-1548-router-stdlib-servemux.md) |
 | G-3 型共有の方式 | **TypeSpec → OpenAPI → 両側コード生成** | [20260812-0659](./adr/20260812-0659-backend-go-openapi-contract.md) |
 | A-2 APIの実行環境 | **AWS Lambda（VPC外）+ Function URL** | [20260812-0712](./adr/20260812-0712-infrastructure-cloudflare-aws-hybrid.md) |
 | B-1 データベース製品 | **v0.1: Neon（シンガポール）→ v1.0前に東京リージョンへ移行** | [20260812-0805](./adr/20260812-0805-database-neon-then-planetscale.md) |

@@ -1,6 +1,6 @@
 # 003: Go の API 雛形を作り、ローカルで叩ける状態にする
 
-- ステータス: 未着手（**着手可能**）
+- ステータス: **進行中**（ステップ1完了 — [ADR 20260815-1420](../adr/20260815-1420-go-version-and-module-path.md)）
 - 見積: 3h / 実績: -h
 - 依存: **002（完了）** — `apps/api` のパッケージ境界と turbo のタスク定義がある前提
 - 関連: [ADR 20260812-0712 インフラ構成](../adr/20260812-0712-infrastructure-cloudflare-aws-hybrid.md)、[ADR 20260812-0659 Go採用](../adr/20260812-0659-backend-go-openapi-contract.md)、[ADR 20260812-1305 Go の置き方](../adr/20260812-1305-go-in-turborepo-workspace.md)、[ADR 20260812-1324 バージョン固定](../adr/20260812-1324-version-pinning-and-audit.md)、[ADR 20260814-1826 商標の繰り延べ](../adr/20260814-1826-defer-trademark-research.md)
@@ -164,8 +164,8 @@ func TestPing(t *testing.T) {
 
 ## 5. 不足情報TODO
 
-- [ ] **Go のモジュールパスを決める。** `github.com/<user>/copan/apps/api` 形式が慣例だが、**このリポジトリにはまだリモートが無い**（`git remote` が空）。また名称は [ADR 20260814-1826](../adr/20260814-1826-defer-trademark-research.md) により v0.1 の間は「仮の COPAN」で、**ドメインと SNS は取得しない**方針。GitHub リポジトリ名は改名可能（＝可逆）なので、**名称確定を待つ理由があるかを判断する**
-- [ ] **Go のバージョンをどれにし、`mise.toml` に含めるか。** [ADR 20260812-1324](../adr/20260812-1324-version-pinning-and-audit.md) の「結果として必要になる決定」に挙がっている宿題。ローカルは 1.25.1（mise のグローバル設定）、mise からは 1.26.6 まで取得可能。**含めるなら CI（006）の Go セットアップも `jdx/mise-action` に寄る**。あわせて `go.mod` の `go` ディレクティブとの関係を整理する
+- [x] ~~**Go のモジュールパスを決める。**~~ → `github.com/hi-lee-mon/copan/apps/api`（[ADR 20260815-1420](../adr/20260815-1420-go-version-and-module-path.md)）
+- [x] ~~**Go のバージョンをどれにし、`mise.toml` に含めるか。**~~ → `mise.toml` に `go = "1.26.6"`、`go.mod` も `go mod init` の既定値 `1.26.6` のまま（同 ADR）
 - [ ] Lambda アダプタを自前で書くか、既存ライブラリを使うか
 - [ ] Lambda のランタイムに何を使うか（`provided.al2023` 等）とバイナリ名の規約
 - [ ] **`apps/api` の turbo タスク設定** — 成果物の出力先（上記 A / B）、`test` タスクのキャッシュ方針

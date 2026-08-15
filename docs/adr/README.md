@@ -51,6 +51,10 @@
 | [2026-08-12 13:13](./20260812-1313-monorepo-directory-layout.md) | ディレクトリ構成を `apps/` + `packages/` の2系統とし、パッケージ名を `@repo/*` で揃える | 承認 |
 | [2026-08-12 13:24](./20260812-1324-version-pinning-and-audit.md) | Node.js と pnpm のバージョンを `mise.toml` に集約し、依存を完全固定して CI で `pnpm audit` を強制する | 承認 |
 | [2026-08-14 18:26](./20260814-1826-defer-trademark-research.md) | 商標の実査を繰り延べ、名称は「仮の COPAN」として実装を先行させる | 承認 |
+| [2026-08-15 14:20](./20260815-1420-go-version-and-module-path.md) | Go を `mise.toml` で 1.26.6 に固定し、モジュールパスを `github.com/hi-lee-mon/copan/apps/api` とする | 承認 |
+| [2026-08-15 15:21](./20260815-1521-go-layered-architecture.md) | Go の内部構成をモジュール単位のレイヤー構造とし、層は中身ができた時点で追加する | 承認 |
+| [2026-08-15 15:48](./20260815-1548-router-stdlib-servemux.md) | HTTP ルーターは標準の `net/http.ServeMux` とし、Gin の採否は 004 と併せて判断する | 承認 |
+| [2026-08-15 19:06](./20260815-1906-lambda-adapter-and-runtime.md) | Lambda アダプタに aws-lambda-go-api-proxy を使い、ランタイムは `provided.al2023` / arm64 とする | 承認 |
 
 ## 決定の連鎖
 
