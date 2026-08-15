@@ -3,7 +3,7 @@
 - ステータス: 未着手
 - 見積: 3h / 実績: -h
 - 依存: 002（ディレクトリ構成が決まっていること）
-- 関連: [ADR 20260812-0712 インフラ構成](../../adr/20260812-0712-infrastructure-cloudflare-aws-hybrid.md)、[ADR 20260812-0659 Go採用](../../adr/20260812-0659-backend-go-openapi-contract.md)
+- 関連: [ADR 20260812-0712 インフラ構成](../adr/20260812-0712-infrastructure-cloudflare-aws-hybrid.md)、[ADR 20260812-0659 Go採用](../adr/20260812-0659-backend-go-openapi-contract.md)
 
 ## 1. 目的
 
@@ -11,7 +11,7 @@ Go の API を **ローカルで HTTP サーバーとして起動して叩ける
 
 ## 2. 背景
 
-[ADR 20260812-0712](../../adr/20260812-0712-infrastructure-cloudflare-aws-hybrid.md) で、API の実行環境は **AWS Lambda（VPC外）+ Function URL** に決まっている。
+[ADR 20260812-0712](../adr/20260812-0712-infrastructure-cloudflare-aws-hybrid.md) で、API の実行環境は **AWS Lambda（VPC外）+ Function URL** に決まっている。
 
 しかし **デプロイより先にローカル実行を確立する**。プロジェクトの方針は TDD であり、テストが Lambda 上でしか回らない状態では TDD のサイクルが成立しないため。
 
@@ -50,7 +50,7 @@ func handler(
 
 1. ローカルで起動できない（Lambda のイベント型を組み立てないと呼べない）
 2. テストが書きにくい（`events.LambdaFunctionURLRequest` を毎回組み立てることになる）
-3. Lambda から離れられない（[ADR 20260812-0712](../../adr/20260812-0712-infrastructure-cloudflare-aws-hybrid.md) は Lambda を選んだが、可逆性は保っておきたい）
+3. Lambda から離れられない（[ADR 20260812-0712](../adr/20260812-0712-infrastructure-cloudflare-aws-hybrid.md) は Lambda を選んだが、可逆性は保っておきたい）
 
 対策として **アプリ本体を標準の `net/http.Handler` として書き、Lambda 側は薄いアダプタにする**構成がある。
 

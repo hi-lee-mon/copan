@@ -12,7 +12,7 @@
 2. 各要素について、判断すべき観点を明確にする（本書 3章）
 3. 変えにくいものから順に、1つずつ決めていく（本書 4章）
 
-という手順を取る。決定した内容は `adr/` に記録する。
+という手順を取る。決定した内容は `docs/adr/` に記録する。
 
 ---
 
@@ -132,7 +132,7 @@ OpenStreetMap公式のタイルサーバーは、アプリケーションから�
 | ID | 決めること | 可逆性 | 判断観点 | 状態 |
 | --- | --- | :-: | --- | --- |
 | G-1 | モノレポツール | 高 | ビルドキャッシュ / タスク依存関係の管理 | **Turborepo で決定** |
-| G-2 | パッケージマネージャ | 高 | モノレポのワークスペース対応 / インストール速度 / 実行環境との相性 | |
+| G-2 | パッケージマネージャ | 高 | モノレポのワークスペース対応 / インストール速度 / 実行環境との相性 | **pnpm で決定** |
 | G-3 | **型共有の方式** | 中 | フロント/バック分離の最大の弱点をどう潰すか。**コード生成が必要か、不要か** / スキーマ定義の二重管理を避けられるか | |
 | G-4 | テスト | 中 | ユニット / 統合 / E2E の役割分担 / **TDDで進める前提** / DBを使うテストをどう書くか | |
 | G-5 | Lint / Format | 高 | 速度 / 設定の手間 | |
@@ -186,19 +186,23 @@ A-1（フロントのホスティング）は可逆性が高く、後回しで�
 
 | 項目 | 決定 | ADR |
 | --- | --- | --- |
-| プロダクト名 | コパン（COPAN） | [20260811-2003](../adr/20260811-2003-product-name.md) |
-| G-1 モノレポツール | Turborepo | [20260811-2015](../adr/20260811-2015-monorepo-turborepo.md) |
-| バックエンドの言語 | **Go** | [20260812-0659](../adr/20260812-0659-backend-go-openapi-contract.md) |
-| G-3 型共有の方式 | **TypeSpec → OpenAPI → 両側コード生成** | [20260812-0659](../adr/20260812-0659-backend-go-openapi-contract.md) |
-| A-2 APIの実行環境 | **AWS Lambda（VPC外）+ Function URL** | [20260812-0712](../adr/20260812-0712-infrastructure-cloudflare-aws-hybrid.md) |
-| B-1 データベース製品 | **v0.1: Neon（シンガポール）→ v1.0前に東京リージョンへ移行** | [20260812-0805](../adr/20260812-0805-database-neon-then-planetscale.md) |
-| C-1 画像の保存先 | **Cloudflare R2**（署名付きURLで直接アップロード） | [20260812-0712](../adr/20260812-0712-infrastructure-cloudflare-aws-hybrid.md) |
-| A-1 フロントのホスティング | Cloudflare（暫定） | [20260812-0712](../adr/20260812-0712-infrastructure-cloudflare-aws-hybrid.md) |
+| プロダクト名 | コパン（COPAN） | [20260811-2003](./adr/20260811-2003-product-name.md) |
+| G-1 モノレポツール | Turborepo | [20260811-2015](./adr/20260811-2015-monorepo-turborepo.md) |
+| G-1' Go の置き方 | **Turborepo 公式の多言語パターン**（`package.json` でパッケージ境界を作る） | [20260812-1305](./adr/20260812-1305-go-in-turborepo-workspace.md) |
+| G-2 パッケージマネージャ | **pnpm**（ワークスペースは `pnpm-workspace.yaml`） | [20260812-1309](./adr/20260812-1309-package-manager-pnpm.md) |
+| G-1'' ディレクトリ構成 | **`apps/`（web・api）+ `packages/`（api-spec・api-client）**、パッケージ名は `@repo/*` | [20260812-1313](./adr/20260812-1313-monorepo-directory-layout.md) |
+| G-2' バージョン固定 | **Node と pnpm は `mise.toml`（CI も `jdx/mise-action` で同じファイルを読む）、`package.json` には turbo が要求する `devEngines.packageManager` を範囲で置く、依存は完全固定 + CI で `pnpm audit`** | [20260812-1324](./adr/20260812-1324-version-pinning-and-audit.md) |
+| バックエンドの言語 | **Go** | [20260812-0659](./adr/20260812-0659-backend-go-openapi-contract.md) |
+| G-3 型共有の方式 | **TypeSpec → OpenAPI → 両側コード生成** | [20260812-0659](./adr/20260812-0659-backend-go-openapi-contract.md) |
+| A-2 APIの実行環境 | **AWS Lambda（VPC外）+ Function URL** | [20260812-0712](./adr/20260812-0712-infrastructure-cloudflare-aws-hybrid.md) |
+| B-1 データベース製品 | **v0.1: Neon（シンガポール）→ v1.0前に東京リージョンへ移行** | [20260812-0805](./adr/20260812-0805-database-neon-then-planetscale.md) |
+| C-1 画像の保存先 | **Cloudflare R2**（署名付きURLで直接アップロード） | [20260812-0712](./adr/20260812-0712-infrastructure-cloudflare-aws-hybrid.md) |
+| A-1 フロントのホスティング | Cloudflare（暫定） | [20260812-0712](./adr/20260812-0712-infrastructure-cloudflare-aws-hybrid.md) |
 | 地図ライブラリ（D-1） | Leaflet（暫定） | 未記録。D-2と併せて確定させる |
 
 ### 実装時に守る制約
 
-DBの移行可能性を保つため、[20260812-0805](../adr/20260812-0805-database-neon-then-planetscale.md) により以下を**実装開始時から**守る。
+DBの移行可能性を保つため、[20260812-0805](./adr/20260812-0805-database-neon-then-planetscale.md) により以下を**実装開始時から**守る。
 
 - Neon 固有機能に依存しない（ブランチ機能は開発時の検証用途に限定）
 - 本番のスキーマ管理はマイグレーションファイルで行う
@@ -214,7 +218,6 @@ DBの移行可能性を保つため、[20260812-0805](../adr/20260812-0805-datab
 | E-1 / E-2 | 認証方式と実装手段 | v0.1の投稿機能の前 |
 | C-2 | 画像リサイズをクライアント側で行うか、Lambda側で行うか | 投稿機能の実装時 |
 | D-2 | 地図タイルの配信元 | v1.0の地図機能の前 |
-| G-2 | パッケージマネージャ | スキャフォールド時 |
 | G-7 | 環境分離（DBの固有機能に依存しない形で設計する） | CI/CD構築時 |
 | — | **DBの移行先の最終決定**（PlanetScale の PostGIS 復旧状況の確認） | v1.0公開の前 |
 | — | 商標・ドメインの実査 | 着手前（[要件定義 #0](./requirements.md#11-未決事項)） |

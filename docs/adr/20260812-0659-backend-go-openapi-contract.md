@@ -2,7 +2,7 @@
 
 - ステータス: 承認
 - 日付: 2026-08-12 06:59
-- 関連: [技術選定ガイド G-3](../docs/tech-decision-guide.md)、[モノレポ構成](./20260811-2015-monorepo-turborepo.md)
+- 関連: [技術選定ガイド G-3](../tech-decision-guide.md)、[モノレポ構成](./20260811-2015-monorepo-turborepo.md)
 
 ## コンテキスト
 

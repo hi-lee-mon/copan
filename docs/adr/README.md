@@ -46,6 +46,11 @@
 | [2026-08-12 07:12](./20260812-0712-infrastructure-cloudflare-aws-hybrid.md) | インフラを Cloudflare（配信層）＋ AWS Lambda（計算層）で構成する | 承認（データ層のみ下記で更新） |
 | [2026-08-12 08:05](./20260812-0805-database-neon-then-planetscale.md) | DBは Neon で開始し、v1.0公開前に東京リージョンのPostgresへ移行する | 承認 |
 | [2026-08-12 09:05](./20260812-0905-development-workflow.md) | 実装は開発者本人が行い、Claude Code はチケット作成と支援に徹する | 承認 |
+| [2026-08-12 13:05](./20260812-1305-go-in-turborepo-workspace.md) | Go を Turborepo 公式の多言語パターンでワークスペースに含める | 承認 |
+| [2026-08-12 13:09](./20260812-1309-package-manager-pnpm.md) | パッケージマネージャに pnpm を採用する | 承認 |
+| [2026-08-12 13:13](./20260812-1313-monorepo-directory-layout.md) | ディレクトリ構成を `apps/` + `packages/` の2系統とし、パッケージ名を `@repo/*` で揃える | 承認 |
+| [2026-08-12 13:24](./20260812-1324-version-pinning-and-audit.md) | Node.js と pnpm のバージョンを `mise.toml` に集約し、依存を完全固定して CI で `pnpm audit` を強制する | 承認 |
+| [2026-08-14 18:26](./20260814-1826-defer-trademark-research.md) | 商標の実査を繰り延べ、名称は「仮の COPAN」として実装を先行させる | 承認 |
 
 ## 決定の連鎖
 

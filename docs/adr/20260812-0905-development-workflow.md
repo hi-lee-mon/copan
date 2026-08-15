@@ -2,11 +2,11 @@
 
 - ステータス: 承認
 - 日付: 2026-08-12 09:05
-- 関連: [Go採用](./20260812-0659-backend-go-openapi-contract.md)、[技術選定ガイド 判断軸5](../docs/tech-decision-guide.md)
+- 関連: [Go採用](./20260812-0659-backend-go-openapi-contract.md)、[技術選定ガイド 判断軸5](../tech-decision-guide.md)
 
 ## コンテキスト
 
-COPAN は開発者1名、週5時間で進める個人開発であり、[技術選定ガイド](../docs/tech-decision-guide.md)の判断軸に「**学習の一般性**」を含めているとおり、**プロダクトの完成と同時に学習を目的としている**。
+COPAN は開発者1名、週5時間で進める個人開発であり、[技術選定ガイド](../tech-decision-guide.md)の判断軸に「**学習の一般性**」を含めているとおり、**プロダクトの完成と同時に学習を目的としている**。
 
 ここで AI エージェント（Claude Code）の使い方が問題になる。
 

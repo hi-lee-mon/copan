@@ -1,0 +1,11 @@
+{
+  "name": "@repo/web",
+  "private": true,
+  "scripts": {
+    "build": "mkdir -p dist && echo built > dist/out.txt",
+    "test": "echo test @repo/web"
+  },
+  "dependencies": {
+    "@repo/api-client": "workspace:*"
+  }
+}

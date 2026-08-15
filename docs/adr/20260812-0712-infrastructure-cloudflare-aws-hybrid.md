@@ -2,7 +2,7 @@
 
 - ステータス: 承認（**データ層の選定のみ [20260812-0805](./20260812-0805-database-neon-then-planetscale.md) で更新**）
 - 日付: 2026-08-12 07:12
-- 関連: [Go採用](./20260812-0659-backend-go-openapi-contract.md)、[技術選定ガイド A・B・C](../docs/tech-decision-guide.md)
+- 関連: [Go採用](./20260812-0659-backend-go-openapi-contract.md)、[技術選定ガイド A・B・C](../tech-decision-guide.md)
 
 > **⚠️ 更新のお知らせ**
 > 本ADRの決定のうち「**データベース: Neon**」の部分は、その後 **Neon に東京リージョンが存在しない**ことが判明したため、[20260812-0805 データベースは Neon で開始し、v1.0公開前に東京リージョンのPostgresへ移行する](./20260812-0805-database-neon-then-planetscale.md) で更新されている。

@@ -2,7 +2,7 @@
 
 - ステータス: 承認
 - 日付: 2026-08-11 20:15
-- 関連: [技術選定ガイド G-1](../docs/tech-decision-guide.md)
+- 関連: [技術選定ガイド G-1](../tech-decision-guide.md)
 
 ## コンテキスト
 

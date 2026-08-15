@@ -1,0 +1,11 @@
+{
+  "name": "@repo/api-client",
+  "private": true,
+  "scripts": {
+    "build": "mkdir -p dist && echo built > dist/out.txt",
+    "test": "echo test @repo/api-client"
+  },
+  "devDependencies": {
+    "@repo/api-spec": "workspace:*"
+  }
+}

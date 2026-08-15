@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## このリポジトリの現状
 
-**コードはまだ1行も存在しない。** 要件定義（`docs/requirements.md`）と技術選定（`docs/tech-decision-guide.md` + `adr/`）だけが入っている、実装前のリポジトリ。
+**コードはまだ1行も存在しない。** 要件定義（`docs/requirements.md`）と技術選定（`docs/tech-decision-guide.md` + `docs/adr/`）だけが入っている、実装前のリポジトリ。
 
 したがって **build / lint / test のコマンドはまだ無い**。進行中の作業は `docs/tickets/README.md` を見ること。当面のゴールはスキャフォールド（「本番URLの `/health` が 200 を返す」まで）。
 
@@ -13,7 +13,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## 役割分担（最重要・例外なく守る）
 
 **Claude Code はこのリポジトリのアプリケーションコードとテストコードを書かない。実装は開発者本人が行う。**
-学習をプロダクト完成と並ぶ目的に据えているため（[ADR 20260812-0905](./adr/20260812-0905-development-workflow.md)）。
+学習をプロダクト完成と並ぶ目的に据えているため（[ADR 20260812-0905](./docs/adr/20260812-0905-development-workflow.md)）。
 
 | Claude がやること | Claude がやらないこと |
 | --- | --- |
@@ -59,7 +59,7 @@ AWS（計算層）          Go の API — Lambda（VPC外）+ Function URL（AP
 データ層（AWSの外）     PostgreSQL + PostGIS（v0.1: Neon シンガポール → v1.0前に東京へ移行）
 ```
 
-この構成は**連鎖している**。上流を覆すと下流が全部変わる（`adr/README.md` の「決定の連鎖」参照）。
+この構成は**連鎖している**。上流を覆すと下流が全部変わる（`docs/adr/README.md` の「決定の連鎖」参照）。
 
 ```text
 バックエンド言語 = Go
@@ -68,7 +68,7 @@ AWS（計算層）          Go の API — Lambda（VPC外）+ Function URL（AP
   └─→ フロントと型が切れる → TypeSpec → OpenAPI → 両側コード生成
 ```
 
-**「Cloudflare 完結（TypeScript + Workers + D1）」はコスト・レイテンシでは客観的に優れている**が、Go を優先して却下済み（`adr/20260812-0805`）。この案を再提案するなら、Go 採用の ADR を覆す話であることを明示すること。
+**「Cloudflare 完結（TypeScript + Workers + D1）」はコスト・レイテンシでは客観的に優れている**が、Go を優先して却下済み（`docs/adr/20260812-0805`）。この案を再提案するなら、Go 採用の ADR を覆す話であることを明示すること。
 
 ## 実装時に必ず守る制約
 
@@ -88,8 +88,8 @@ AWS（計算層）          Go の API — Lambda（VPC外）+ Function URL（AP
 - 作業は**チケット単位**で進める（上記「役割分担」参照）
 - **TDD**。テストを先に書く
 - コードには `How`、テストコードには `What`、コミットログには `Why`、コードコメントには `Why not` を書く
-- **意思決定をしたら `adr/<yyyymmdd-hhmm>-<内容がわかる名前>.md` を作成する。** 書式とルールは `adr/README.md`（却下した案とその理由を必ず残す。既存 ADR は書き換えず、新しい ADR を作って古い方から参照する）
-- ADR を追加したら `adr/README.md` の一覧と `docs/tech-decision-guide.md`「5. 決定済みの事項」も更新する
+- **意思決定をしたら `docs/adr/<yyyymmdd-hhmm>-<内容がわかる名前>.md` を作成する。** 書式とルールは `docs/adr/README.md`（却下した案とその理由を必ず残す。既存 ADR は書き換えず、新しい ADR を作って古い方から参照する）
+- ADR を追加したら `docs/adr/README.md` の一覧と `docs/tech-decision-guide.md`「5. 決定済みの事項」も更新する
 - ドキュメントは日本語
 
 ### 技術選定の判断軸
@@ -118,4 +118,4 @@ AWS（計算層）          Go の API — Lambda（VPC外）+ Function URL（AP
 - 画像リサイズをクライアント側で行うか Lambda 側か（投稿機能の実装時）
 - 地図タイルの配信元 — OSM 公式タイルサーバーは本番利用不可（v1.0 の地図機能の前）
 - DB の最終的な移行先（PlanetScale の PostGIS 復旧状況を確認してから）
-- 商標・ドメインの実査（最優先・着手前）
+- 商標・ドメインの実査 — **v1.0 公開の準備を始める前まで繰り延べ済み**（[ADR 20260814-1826](./docs/adr/20260814-1826-defer-trademark-research.md)）。v0.1 の間は名称を「**仮の COPAN**」として扱う。**ドメイン・SNS アカウントは取得しない**（不可逆なため）
