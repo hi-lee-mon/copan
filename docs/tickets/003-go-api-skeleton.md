@@ -1,7 +1,7 @@
 # 003: Go の API 雛形を作り、ローカルで叩ける状態にする
 
-- ステータス: **進行中**（実装ステップ1〜8完了。残りは学習TODOと振り返り）
-- 見積: 3h / 実績: -h
+- ステータス: **完了**（2026-08-15）
+- 見積: 3h / 実績: 3h
 - 依存: **002（完了）** — `apps/api` のパッケージ境界と turbo のタスク定義がある前提
 - 関連: [ADR 20260812-0712 インフラ構成](../adr/20260812-0712-infrastructure-cloudflare-aws-hybrid.md)、[ADR 20260812-0659 Go採用](../adr/20260812-0659-backend-go-openapi-contract.md)、[ADR 20260812-1305 Go の置き方](../adr/20260812-1305-go-in-turborepo-workspace.md)、[ADR 20260812-1324 バージョン固定](../adr/20260812-1324-version-pinning-and-audit.md)、[ADR 20260814-1826 商標の繰り延べ](../adr/20260814-1826-defer-trademark-research.md)
 - 本チケットで生まれた ADR: [20260815-1420 バージョンとモジュールパス](../adr/20260815-1420-go-version-and-module-path.md)、[20260815-1521 内部構成](../adr/20260815-1521-go-layered-architecture.md)、[20260815-1548 ルーター](../adr/20260815-1548-router-stdlib-servemux.md)、[20260815-1906 Lambda アダプタとランタイム](../adr/20260815-1906-lambda-adapter-and-runtime.md)、[20260815-2314 ビルド成果物と turbo タスク](../adr/20260815-2314-go-build-output-and-turbo-tasks.md)、[20260815-2315 ルーターの置き場所](../adr/20260815-2315-router-placement.md)
@@ -31,11 +31,11 @@ Go の API を **ローカルで HTTP サーバーとして起動して叩ける
   "private": true,
   "scripts": {
     "build": "mkdir -p dist && echo built > dist/out.txt", // ← 差し替える
-    "test": "echo test @repo/api"                          // ← 差し替える
+    "test": "echo test @repo/api", // ← 差し替える
   },
   "devDependencies": {
-    "@repo/api-spec": "workspace:*" // ← 004 で TypeSpec が入ると効いてくる順序制御
-  }
+    "@repo/api-spec": "workspace:*", // ← 004 で TypeSpec が入ると効いてくる順序制御
+  },
 }
 ```
 
@@ -117,8 +117,8 @@ func TestPing(t *testing.T) {
 {
   "scripts": {
     "build": "go build -o ??? ???",
-    "test": "go test ./..."
-  }
+    "test": "go test ./...",
+  },
 }
 ```
 
@@ -128,18 +128,18 @@ func TestPing(t *testing.T) {
 
 対処は2通り。**どちらを採るかはこのチケットの判断。**
 
-| | 内容 |
-| --- | --- |
-| A | Go の成果物も `dist/` に出し、ルートの定義をそのまま使う |
-| B | `apps/api/turbo.json` を作り、`extends` でこのパッケージだけ `outputs` を上書きする |
+|     | 内容                                                                                |
+| --- | ----------------------------------------------------------------------------------- |
+| A   | Go の成果物も `dist/` に出し、ルートの定義をそのまま使う                            |
+| B   | `apps/api/turbo.json` を作り、`extends` でこのパッケージだけ `outputs` を上書きする |
 
 ```jsonc
 // apps/api/turbo.json（B を採る場合）
 {
   "extends": ["//"], // ← ルートの定義を継承し、必要な部分だけ上書きする
   "tasks": {
-    "build": { "outputs": ["???"] }
-  }
+    "build": { "outputs": ["???"] },
+  },
 }
 ```
 
@@ -155,13 +155,30 @@ func TestPing(t *testing.T) {
 
 ## 4. 学習TODO
 
-- [ ] Lambda のコールドスタートとウォームスタートで、何が再利用されるか説明できる
-- [ ] `http.Handler` を挟むことで、何が可逆になるのかを説明できる
-- [ ] `internal/` パッケージの制約を説明できる
-- [ ] `httptest` を使ったテストが、Lambda のイベント型を直接扱うテストより優れている理由を説明できる
-- [ ] Go のクロスコンパイルで Lambda 向けバイナリを作るとき、何を指定する必要があるか説明できる
-- [ ] **Go 自身のビルド／テストキャッシュと、Turborepo のキャッシュが、それぞれ何を単位にしているか説明できる**
-- [ ] **`go.mod` の `go` ディレクティブが何を意味するか**（インストールされている Go のバージョンとの関係）説明できる
+- [x] Lambda のコールドスタートとウォームスタートで、何が再利用されるか説明できる
+  - **コールドスタート**: 実行環境（コンテナ）が新規に作られ、バイナリがロードされ、**`main()` が走る**
+  - **ウォームスタート**: 直前の実行環境がそのまま生きており、**`main()` は走らない**。`lambda.Start()` に渡したハンドラだけが、既に立ち上がっているプロセスの中で呼ばれる
+  - 再利用されるのは**プロセスのメモリ上の状態**（グローバル変数、接続オブジェクト等）。したがって `main()` の中で1回だけ張った DB 接続を、ウォームの間は使い回せる（[ADR 20260812-0712](../adr/20260812-0712-infrastructure-cloudflare-aws-hybrid.md) のレイテンシ緩和策）
+- [x] `http.Handler` を挟むことで、何が可逆になるのかを説明できる
+  - 可逆になるのは **実行基盤（どこで動かすか）**。`rest.NewRouter()` が標準の `http.Handler` を返すため、**アプリ本体は自分が Lambda で動いていることを知らない**
+  - Lambda をやめて EC2 / Cloud Run / 自前のサーバーに移す場合、書き換えるのは `cmd/lambda/main.go` の数行だけで、`internal/` は一切触らない
+- [x] `internal/` パッケージの制約を説明できる
+  - `internal/` ディレクトリの**親**をルートとして、そのルート配下以外からはパッケージを import できない（基準は `internal/` 自身ではなく、その親）
+- [x] `httptest` を使ったテストが、Lambda のイベント型を直接扱うテストより優れている理由を説明できる
+  - 比較対象は「**ローカルで** `events.LambdaFunctionURLRequest` を組み立てるテスト」。どちらもローカルで走るため、実行速度や実行費用の差は無い
+  - イベント型を使うと **テストが Lambda に依存する**。実行基盤を変えた瞬間にテストを書き直すことになり、`internal/` を基盤から切り離した意味が失われる
+  - `httptest.NewRequest(http.MethodGet, "/ping", nil)` は HTTP の語彙だけで書けるため、基盤を変えてもそのまま残る（**上記「可逆になるもの」と同じ論点の裏返し**）
+- [x] Go のクロスコンパイルで Lambda 向けバイナリを作るとき、何を指定する必要があるか説明できる
+  - `GOOS=linux GOARCH=arm64`（開発機は darwin/arm64、Lambda は linux/arm64）
+- [x] **Go 自身のビルド／テストキャッシュと、Turborepo のキャッシュが、それぞれ何を単位にしているか説明できる**
+  - **単位**: Go は**パッケージ単位**（`internal/rest` と `internal/health/...` を別々に判定する）、Turborepo は**タスク単位**（`@repo/api` の `test` 全体で1つ）
+  - **Go のハッシュ材料**: そのパッケージと依存パッケージのソースの内容（タイムスタンプではなく中身）、コンパイラのバージョン・ビルドフラグ・`GOOS` / `GOARCH`、`go test` の引数、実行中に読んだ環境変数とファイル
+  - **Turborepo のハッシュ材料**: パッケージ内の Git 管理下のファイル、**そのパッケージが依存しているパッケージ**のハッシュ（`dependsOn: ["^build"]` の `^` は依存先を先に走らせる印。`@repo/api` のビルド時に `@repo/api-spec` が先に走るのがその実例）、宣言した環境変数、`package.json` の `scripts` の内容
+  - **二層になる**: turbo が「コマンドを起動するか」、Go が「起動された中で何を実際に走らせるか」を決める。`turbo run test` で `cache miss, executing`（turbo）と `ok ... (cached)`（Go）が同時に出るのは、この粒度差による
+- [x] **`go.mod` の `go` ディレクティブが何を意味するか**（インストールされている Go のバージョンとの関係）説明できる
+  - このモジュールが**要求する最低の Go バージョン**であり、同時に使う言語仕様のバージョン（言語仕様を決めるのは**マイナーまで**。パッチ部分は最低要求の判定にしか使われない）
+  - **手元の Go が要求より古いときだけ**、`GOTOOLCHAIN`（既定値 `auto`）が必要なツールチェーンを自動ダウンロードして使う。**手元が新しい場合は手元のものをそのまま使う**
+  - この非対称性のため、`go.mod` を `mise.toml` より新しい値にすると mise の管理外（`~/.cache/go/toolchain`）にツールチェーンが落ち、「バージョンの真実は `mise.toml` に集約する」前提が静かに破れる。**Go を下げるときは `go.mod` を先に下げる**（[ADR 20260815-1420](../adr/20260815-1420-go-version-and-module-path.md) の「トレードオフ」参照）
 
 ## 5. 不足情報TODO
 
@@ -194,7 +211,7 @@ func TestPing(t *testing.T) {
 ## 7. 完了条件
 
 - [x] `go test ./...` が通る
-- [ ] `go run ./cmd/local` で起動し、`curl localhost:<port>/ping` が 200 を返す（ステップ8の移設後、再確認が必要）
+- [x] `go run ./cmd/local` で起動し、`curl localhost:8081/ping` が 200 と `pong` を返す
 - [x] `go build ./cmd/lambda` が成功する
 - [x] ローカルと Lambda が同一のハンドラを共有している（実装が二重になっていない）— 両者とも `rest.NewRouter()` を呼ぶ
 - [x] ルートから `pnpm exec turbo run test` を流すと、Go のテストが実行される
@@ -202,10 +219,10 @@ func TestPing(t *testing.T) {
 - [x] **ビルド成果物を削除してから `turbo run build` を流すと、キャッシュヒット（`FULL TURBO`）した上で成果物が復元される**
 - [x] `.gitignore` が Go のビルド成果物と整合している（バイナリがコミット対象に入らない）— 成果物は `dist/` 配下なので既存の `dist/` 行が効く。`bootstrap` 行は手動ビルド時の保険として残す
 - [x] Go のバージョンとモジュールパスの決定が ADR に残っている
-- [ ] 学習TODOがすべて埋まっている
+- [x] 学習TODOがすべて埋まっている
 
 ## 8. 振り返り（完了時に本人が記入）
 
-- 詰まった点:
-- 分かったこと:
-- 見積とのズレと、その原因:
+- 詰まった点:golangやturborepoのキャッシュの仕組み。golangのそもそもの書き方。golangのアーキテクチャ。
+- 分かったこと:golangのことがあまりわかっていないし、フォルダ構成の決め方もわからない。キャッシュの仕組みはある程度理解できた。
+- 見積とのズレと、その原因:時間は見積もり通りだったと思うけど、golangもturborepoも初めてで理解二時間がかかった。
