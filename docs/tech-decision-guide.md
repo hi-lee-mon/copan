@@ -201,6 +201,7 @@ A-1（フロントのホスティング）は可逆性が高く、後回しで�
 | G-10 HTTP ルーター | **標準の `net/http.ServeMux`（Go 1.22+）。Gin は不採用だが恒久排除ではなく、004 の生成ツール選定と併せて再判断する** | [20260815-1548](./adr/20260815-1548-router-stdlib-servemux.md) |
 | G-3 型共有の方式 | **TypeSpec → OpenAPI → 両側コード生成** | [20260812-0659](./adr/20260812-0659-backend-go-openapi-contract.md) |
 | A-2 APIの実行環境 | **AWS Lambda（VPC外）+ Function URL** | [20260812-0712](./adr/20260812-0712-infrastructure-cloudflare-aws-hybrid.md) |
+| G-11 インフラのコード管理 | **AWS のリソースは Terraform で管理する。コンソールでの手作業を正の状態としない。Terraform 本体も `mise.toml` で固定する。Cloudflare を含めるかは未決** | [20260816-0017](./adr/20260816-0017-infrastructure-as-code-terraform.md) |
 | B-1 データベース製品 | **v0.1: Neon（シンガポール）→ v1.0前に東京リージョンへ移行** | [20260812-0805](./adr/20260812-0805-database-neon-then-planetscale.md) |
 | C-1 画像の保存先 | **Cloudflare R2**（署名付きURLで直接アップロード） | [20260812-0712](./adr/20260812-0712-infrastructure-cloudflare-aws-hybrid.md) |
 | A-1 フロントのホスティング | Cloudflare（暫定） | [20260812-0712](./adr/20260812-0712-infrastructure-cloudflare-aws-hybrid.md) |
@@ -225,5 +226,6 @@ DBの移行可能性を保つため、[20260812-0805](./adr/20260812-0805-databa
 | C-2 | 画像リサイズをクライアント側で行うか、Lambda側で行うか | 投稿機能の実装時 |
 | D-2 | 地図タイルの配信元 | v1.0の地図機能の前 |
 | G-7 | 環境分離（DBの固有機能に依存しない形で設計する） | CI/CD構築時 |
+| G-11' | Terraform の state の置き場所、ディレクトリ、`apply` の実行者、Cloudflare を含めるか（[20260816-0017](./adr/20260816-0017-infrastructure-as-code-terraform.md)） | 007 のチケット作成時 |
 | — | **DBの移行先の最終決定**（PlanetScale の PostGIS 復旧状況の確認） | v1.0公開の前 |
 | — | 商標・ドメインの実査 | 着手前（[要件定義 #0](./requirements.md#11-未決事項)） |

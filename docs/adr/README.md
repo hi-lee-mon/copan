@@ -57,6 +57,7 @@
 | [2026-08-15 19:06](./20260815-1906-lambda-adapter-and-runtime.md) | Lambda アダプタに aws-lambda-go-api-proxy を使い、ランタイムは `provided.al2023` / arm64 とする | 承認 |
 | [2026-08-15 23:14](./20260815-2314-go-build-output-and-turbo-tasks.md) | Go のビルド成果物を `apps/api/dist/bootstrap` に出し、パッケージ単位の `turbo.json` を作らない | 承認 |
 | [2026-08-15 23:15](./20260815-2315-router-placement.md) | HTTP ルーターの組み立てを `internal/rest` に置き、各モジュールはハンドラ関数だけを公開する | 承認 |
+| [2026-08-16 00:17](./20260816-0017-infrastructure-as-code-terraform.md) | Lambda を含む AWS のリソースを Terraform で管理する | 承認 |
 
 ## 決定の連鎖
 
