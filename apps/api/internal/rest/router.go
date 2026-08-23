@@ -3,13 +3,11 @@ package rest
 import (
 	"net/http"
 
-	"github.com/hi-lee-mon/copan/apps/api/internal/health/interface/rest/handler"
+	"github.com/hi-lee-mon/copan/apps/api/internal/rest/gen"
 )
 
 func NewRouter() http.Handler {
-	mux := http.NewServeMux()
+	si := gen.NewStrictHandler(server{}, nil)
 
-	mux.HandleFunc("GET /ping", handler.Ping)
-
-	return mux
+	return gen.HandlerWithOptions(si, gen.StdHTTPServerOptions{})
 }

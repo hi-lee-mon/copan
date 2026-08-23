@@ -198,8 +198,10 @@ A-1（フロントのホスティング）は可逆性が高く、後回しで�
 | G-9' ルーターの置き場所 | **`internal/rest/router.go`（モジュールの外）。各モジュールはパスを知らず、ハンドラ関数だけを公開する。依存は `rest` → モジュールの一方通行** | [20260815-2315](./adr/20260815-2315-router-placement.md) |
 | G-1''' Go の turbo タスク | **成果物は `apps/api/dist/bootstrap`（`GOOS=linux GOARCH=arm64`）。パッケージ単位の `turbo.json` は作らず、ルートの `outputs: ["dist/**"]` を使う。`test` はキャッシュ有効のまま** | [20260815-2314](./adr/20260815-2314-go-build-output-and-turbo-tasks.md) |
 | A-2' Lambda アダプタとランタイム | **`aws-lambda-go` + `aws-lambda-go-api-proxy/httpadapter`（`NewV2` を Function URL に流用）、`provided.al2023` / arm64、バイナリ名 `bootstrap`** | [20260815-1906](./adr/20260815-1906-lambda-adapter-and-runtime.md) |
-| G-10 HTTP ルーター | **標準の `net/http.ServeMux`（Go 1.22+）。Gin は不採用だが恒久排除ではなく、004 の生成ツール選定と併せて再判断する** | [20260815-1548](./adr/20260815-1548-router-stdlib-servemux.md) |
+| G-10 HTTP ルーター | **標準の `net/http.ServeMux`（Go 1.22+）。Gin は不採用で確定**（`oapi-codegen` の `std-http-server` で標準ルーターを維持できるため） | [20260815-1548](./adr/20260815-1548-router-stdlib-servemux.md) → [20260823-1453](./adr/20260823-1453-openapi-to-go-codegen.md) |
 | G-3 型共有の方式 | **TypeSpec → OpenAPI → 両側コード生成** | [20260812-0659](./adr/20260812-0659-backend-go-openapi-contract.md) |
+| G-3' OpenAPI の出力先 | **`@typespec/openapi3` の既定のまま（`packages/api-spec/tsp-output/@typespec/openapi3/openapi.yaml`）に出してコミットする。`tspconfig.yaml` は作らない** | [20260823-1423](./adr/20260823-1423-openapi-output-location.md) |
+| G-3'' OpenAPI → Go の生成 | **`oapi-codegen` v2.8.0（`models` + `std-http-server` + `strict-server`）。生成先は `apps/api/internal/rest/gen/`、`StrictServerInterface` は `internal/rest/server.go` の集約 struct が各モジュールを埋め込んで満たす。ツールは `go.mod` の `tool` ディレクティブで固定し、生成は各パッケージの `build` スクリプトに含める（`turbo.jsonc` は変更しない）** | [20260823-1453](./adr/20260823-1453-openapi-to-go-codegen.md) |
 | A-2 APIの実行環境 | **AWS Lambda（VPC外）+ Function URL** | [20260812-0712](./adr/20260812-0712-infrastructure-cloudflare-aws-hybrid.md) |
 | G-11 インフラのコード管理 | **AWS のリソースは Terraform で管理する。コンソールでの手作業を正の状態としない。Terraform 本体も `mise.toml` で固定する。Cloudflare を含めるかは未決** | [20260816-0017](./adr/20260816-0017-infrastructure-as-code-terraform.md) |
 | B-1 データベース製品 | **v0.1: Neon（シンガポール）→ v1.0前に東京リージョンへ移行** | [20260812-0805](./adr/20260812-0805-database-neon-then-planetscale.md) |

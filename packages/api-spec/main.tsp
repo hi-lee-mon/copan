@@ -4,9 +4,10 @@ using Http;
 @service(#{ title: "Copan API" })
 namespace Copan;
 
-@route("/health")
-@get
-op check(): HealthResponse;
+@route("/healthz")
+interface Health {
+@get check(): HealthResponse;
+}
 
 model HealthResponse {
   version?: string;

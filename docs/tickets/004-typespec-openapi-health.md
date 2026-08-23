@@ -4,6 +4,7 @@
 - 見積: 2h / 実績: -h
 - 依存: **003（完了）** — turbo のタスクに実物のビルドが乗り、`outputs` の扱いを一度踏んでいる前提
 - 関連: [ADR 20260812-0659 Go採用と TypeSpec 起点の契約](../adr/20260812-0659-backend-go-openapi-contract.md)、[ADR 20260812-1313 ディレクトリ構成](../adr/20260812-1313-monorepo-directory-layout.md)、[ADR 20260812-1309 pnpm](../adr/20260812-1309-package-manager-pnpm.md)、[ADR 20260815-2314 ビルド成果物と turbo タスク](../adr/20260815-2314-go-build-output-and-turbo-tasks.md)、[ADR 20260815-2315 ルーターの置き場所](../adr/20260815-2315-router-placement.md)、[CLAUDE.md の制約「API 契約の単一情報源は TypeSpec」](../../CLAUDE.md)
+- 本チケットで生まれた ADR: [20260823-1423 OpenAPI の出力先とコミット方針](../adr/20260823-1423-openapi-output-location.md)
 
 ## 1. 目的
 
@@ -268,12 +269,12 @@ main.tsp:8:2 - error invalid-ref: Unknown decorator @info
 
 ## 5. 不足情報TODO
 
-- [ ] **生成した OpenAPI の出力先と、コミットするかどうかを決める**（上記 A〜D）→ **ADR化**
-- [ ] **turbo のどのタスクで生成するか**（`build` か、`generate` の新設か）→ 上の ADR に含める。[ADR 20260812-1313](../adr/20260812-1313-monorepo-directory-layout.md) の宿題
-- [ ] **`/health` が何を返すか**（フィールドと型）。**このチケットで決めるのは契約の形だけ**で、中身をどう埋めるかは 005
-- [ ] **`@typespec/rest` を入れるか**（`@typespec/http` だけで書けるかを試してから決める）
-- [ ] **OpenAPI のバージョンを既定の 3.0.0 のままにするか**。005 で使う Go の生成器が読める版に合わせる必要があるため、**変える理由が示せないなら既定のまま**にする
-- [ ] **`info.version` を埋めるか**（埋めるなら `@typespec/openapi` の追加が要る）
+- [x] ~~**生成した OpenAPI の出力先と、コミットするかどうかを決める**（上記 A〜D）~~ → **A〜D のいずれでもなく、emitter の既定の出力先（`tsp-output/@typespec/openapi3/openapi.yaml`）に出してコミットする**。`tspconfig.yaml` は作らない（[ADR 20260823-1423](../adr/20260823-1423-openapi-output-location.md)）
+- [ ] **turbo のどのタスクで生成するか**（`build` か、`generate` の新設か）→ **暫定で「載せない」（`gen-oa` から手動）。確定は [チケット 005](./005-health-from-generated-types.md) に持ち越し**。OpenAPI → Go の生成と同じ問いのため（[ADR 20260823-1423](../adr/20260823-1423-openapi-output-location.md) の「結果として必要になる決定」）。[ADR 20260812-1313](../adr/20260812-1313-monorepo-directory-layout.md) の宿題
+- [x] ~~**`/health` が何を返すか**（フィールドと型）~~ → `status: "OK"`（必須）と `version?: string`（省略可能）
+- [x] ~~**`@typespec/rest` を入れるか**~~ → **入れない。** `@typespec/http` の `@route` / `@get` だけで書けた
+- [x] ~~**OpenAPI のバージョンを既定の 3.0.0 のままにするか**~~ → **既定の 3.0.0 のまま。** 変える理由が示せなかった
+- [x] ~~**`info.version` を埋めるか**~~ → **埋めない。** `@typespec/openapi` を足さず、`0.0.0` のままにする（[ADR 20260823-1423](../adr/20260823-1423-openapi-output-location.md) の「結果として必要になる決定」に残す）
 
 ## 6. 実装ステップ
 

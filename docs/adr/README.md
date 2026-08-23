@@ -53,11 +53,13 @@
 | [2026-08-14 18:26](./20260814-1826-defer-trademark-research.md) | 商標の実査を繰り延べ、名称は「仮の COPAN」として実装を先行させる | 承認 |
 | [2026-08-15 14:20](./20260815-1420-go-version-and-module-path.md) | Go を `mise.toml` で 1.26.6 に固定し、モジュールパスを `github.com/hi-lee-mon/copan/apps/api` とする | 承認 |
 | [2026-08-15 15:21](./20260815-1521-go-layered-architecture.md) | Go の内部構成をモジュール単位のレイヤー構造とし、層は中身ができた時点で追加する | 承認 |
-| [2026-08-15 15:48](./20260815-1548-router-stdlib-servemux.md) | HTTP ルーターは標準の `net/http.ServeMux` とし、Gin の採否は 004 と併せて判断する | 承認 |
+| [2026-08-15 15:48](./20260815-1548-router-stdlib-servemux.md) | HTTP ルーターは標準の `net/http.ServeMux` とし、Gin の採否は 004 と併せて判断する | 承認（Gin の採否は 20260823-1453 で不採用に確定） |
 | [2026-08-15 19:06](./20260815-1906-lambda-adapter-and-runtime.md) | Lambda アダプタに aws-lambda-go-api-proxy を使い、ランタイムは `provided.al2023` / arm64 とする | 承認 |
 | [2026-08-15 23:14](./20260815-2314-go-build-output-and-turbo-tasks.md) | Go のビルド成果物を `apps/api/dist/bootstrap` に出し、パッケージ単位の `turbo.json` を作らない | 承認 |
 | [2026-08-15 23:15](./20260815-2315-router-placement.md) | HTTP ルーターの組み立てを `internal/rest` に置き、各モジュールはハンドラ関数だけを公開する | 承認 |
 | [2026-08-16 00:17](./20260816-0017-infrastructure-as-code-terraform.md) | Lambda を含む AWS のリソースを Terraform で管理する | 承認 |
+| [2026-08-23 14:23](./20260823-1423-openapi-output-location.md) | 生成した OpenAPI を emitter の既定の出力先に出し、そのままコミットする | 承認（生成タスクの回し方のみ下記で更新） |
+| [2026-08-23 14:53](./20260823-1453-openapi-to-go-codegen.md) | OpenAPI から Go を生成するツールに oapi-codegen を採用し、strict-server まで生成させる | 承認 |
 
 ## 決定の連鎖
 
