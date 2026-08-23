@@ -112,13 +112,13 @@ flowchart LR
 
 ### パッケージ構成と版（今日時点で実測）
 
-| パッケージ | 版 | 役割 |
-| --- | --- | --- |
-| `@typespec/compiler` | 1.15.0 | コンパイラ本体。`tsp` コマンドもこれが提供する |
-| `@typespec/http` | 1.15.0 | `@route` / `@get` / `@statusCode` など **HTTP の語彙** |
-| `@typespec/openapi3` | 1.15.0 | **OpenAPI 3.x を書き出す emitter** |
-| `@typespec/openapi` | 1.15.0 | `@info` など OpenAPI 固有のメタデータ。**要否は判断すること**（後述） |
-| `@typespec/rest` | 0.85.0 | リソース指向のテンプレート（`@typespec/http` の上に乗る）。**要否は判断すること** |
+| パッケージ           | 版     | 役割                                                                              |
+| -------------------- | ------ | --------------------------------------------------------------------------------- |
+| `@typespec/compiler` | 1.15.0 | コンパイラ本体。`tsp` コマンドもこれが提供する                                    |
+| `@typespec/http`     | 1.15.0 | `@route` / `@get` / `@statusCode` など **HTTP の語彙**                            |
+| `@typespec/openapi3` | 1.15.0 | **OpenAPI 3.x を書き出す emitter**                                                |
+| `@typespec/openapi`  | 1.15.0 | `@info` など OpenAPI 固有のメタデータ。**要否は判断すること**（後述）             |
+| `@typespec/rest`     | 0.85.0 | リソース指向のテンプレート（`@typespec/http` の上に乗る）。**要否は判断すること** |
 
 `@typespec/rest` だけ 1.0 に到達していない。`/health` の定義に必要かどうかは、`@typespec/http` だけで書いてみてから決められる。
 
@@ -159,12 +159,12 @@ $ pnpm exec tsp compile . --emit=@typespec/openapi3
 
 `@typespec/openapi3` の主なオプションと既定値は次のとおり。
 
-| オプション | 既定値 |
-| --- | --- |
-| `emitter-output-dir` | `{output-dir}/@typespec/openapi3` |
-| `output-file` | `{service-name-if-multiple}.{version}.openapi.yaml` |
-| `file-type` | `yaml` |
-| `openapi-versions` | `["3.0.0"]` |
+| オプション           | 既定値                                              |
+| -------------------- | --------------------------------------------------- |
+| `emitter-output-dir` | `{output-dir}/@typespec/openapi3`                   |
+| `output-file`        | `{service-name-if-multiple}.{version}.openapi.yaml` |
+| `file-type`          | `yaml`                                              |
+| `openapi-versions`   | `["3.0.0"]`                                         |
 
 `{output-dir}` の既定は `{cwd}/tsp-output`。`{project-root}` などのプレースホルダも使える。サービスが1つで版管理をしていなければ、`output-file` は実際には `openapi.yaml` になる（上の実測どおり）。
 
@@ -184,11 +184,11 @@ options:
 
 ここで**3つの決定が正面からぶつかる**。
 
-| 決定 | 内容 |
-| --- | --- |
-| [CLAUDE.md の制約](../../CLAUDE.md) | 生成物は**コミットし**、CI で再生成して差分が出たら失敗させる |
-| ルートの `turbo.jsonc` | `build` の `outputs` は `["dist/**"]`。**ここに載らない成果物はキャッシュから復元されない**（003 で体験済み） |
-| `.gitignore` | `dist/` は**無視する** |
+| 決定                                | 内容                                                                                                          |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| [CLAUDE.md の制約](../../CLAUDE.md) | 生成物は**コミットし**、CI で再生成して差分が出たら失敗させる                                                 |
+| ルートの `turbo.jsonc`              | `build` の `outputs` は `["dist/**"]`。**ここに載らない成果物はキャッシュから復元されない**（003 で体験済み） |
+| `.gitignore`                        | `dist/` は**無視する**                                                                                        |
 
 つまり **「`dist/` に出す」と `outputs` はそのまま効くがコミットできず、「コミット対象のディレクトリに出す」と `outputs` に載らない**。どちらを崩すかを決める必要がある。
 
@@ -212,12 +212,12 @@ flowchart TB
 
 **×印のどちらを、どう埋めるか**が A〜D の違いである。
 
-|     | 出力先 | 崩すもの |
-| --- | --- | --- |
-| A | `dist/` に出し、`.gitignore` に例外行（`!packages/api-spec/dist/`）を足す | 「`dist/` は生成物なので無視する」という規約に穴が開く |
-| B | `packages/api-spec/openapi/` などコミット対象の場所に出し、**ルートの `turbo.jsonc` の `outputs` に足す** | ルートの定義に、1パッケージのためのパスが混ざる |
-| C | 同上の場所に出し、**`packages/api-spec/turbo.json` を `extends` で作って上書きする** | [ADR 20260815-2314](../adr/20260815-2314-go-build-output-and-turbo-tasks.md) の「パッケージ単位の `turbo.json` を作らない」と衝突する |
-| D | 生成物をコミットしない（CI で毎回生成する） | CLAUDE.md の制約と [ADR 20260812-0659](../adr/20260812-0659-backend-go-openapi-contract.md) の「生成処理を CI で検証」の前提を覆す |
+|     | 出力先                                                                                                    | 崩すもの                                                                                                                              |
+| --- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| A   | `dist/` に出し、`.gitignore` に例外行（`!packages/api-spec/dist/`）を足す                                 | 「`dist/` は生成物なので無視する」という規約に穴が開く                                                                                |
+| B   | `packages/api-spec/openapi/` などコミット対象の場所に出し、**ルートの `turbo.jsonc` の `outputs` に足す** | ルートの定義に、1パッケージのためのパスが混ざる                                                                                       |
+| C   | 同上の場所に出し、**`packages/api-spec/turbo.json` を `extends` で作って上書きする**                      | [ADR 20260815-2314](../adr/20260815-2314-go-build-output-and-turbo-tasks.md) の「パッケージ単位の `turbo.json` を作らない」と衝突する |
+| D   | 生成物をコミットしない（CI で毎回生成する）                                                               | CLAUDE.md の制約と [ADR 20260812-0659](../adr/20260812-0659-backend-go-openapi-contract.md) の「生成処理を CI で検証」の前提を覆す    |
 
 判断材料として、**ADR 20260815-2314 が `turbo.json` を作らないと決めた理由は「`dist/` に出せば足りるから」**であり、方針そのものではない（同 ADR の「`apps/api/turbo.json` を作らなかった理由」）。前提が変われば C は必ずしも矛盾しない。
 
