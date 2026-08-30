@@ -136,7 +136,7 @@ OpenStreetMap公式のタイルサーバーは、アプリケーションから�
 | G-3 | **型共有の方式** | 中 | フロント/バック分離の最大の弱点をどう潰すか。**コード生成が必要か、不要か** / スキーマ定義の二重管理を避けられるか | |
 | G-4 | テスト | 中 | ユニット / 統合 / E2E の役割分担 / **TDDで進める前提** / DBを使うテストをどう書くか | |
 | G-5 | Lint / Format | 高 | 速度 / 設定の手間 | |
-| G-6 | CI/CD | 高 | どこで動かすか / テストとデプロイの分離 / プレビュー環境 | |
+| G-6 | CI/CD | 高 | どこで動かすか / テストとデプロイの分離 / プレビュー環境 | **CI は GitHub Actions で決定（CD は 007）** |
 | G-7 | 環境分離とシークレット管理 | 中 | local / preview / production をどう分けるか / **本番の接続情報をどこに置くか** | |
 | G-8 | ローカル開発環境 | 高 | **DBをローカルでどう動かすか**（Docker / クラウドの開発用インスタンス） / 実行環境をローカルで再現できるか | |
 
@@ -204,6 +204,8 @@ A-1（フロントのホスティング）は可逆性が高く、後回しで�
 | G-3'' OpenAPI → Go の生成 | **`oapi-codegen` v2.8.0（`models` + `std-http-server` + `strict-server`）。生成先は `apps/api/internal/rest/gen/`、`StrictServerInterface` は `internal/rest/server.go` の集約 struct が各モジュールを埋め込んで満たす。ツールは `go.mod` の `tool` ディレクティブで固定し、生成は各パッケージの `build` スクリプトに含める（`turbo.jsonc` は変更しない）** | [20260823-1453](./adr/20260823-1453-openapi-to-go-codegen.md) |
 | A-2 APIの実行環境 | **AWS Lambda（VPC外）+ Function URL** | [20260812-0712](./adr/20260812-0712-infrastructure-cloudflare-aws-hybrid.md) |
 | G-11 インフラのコード管理 | **AWS のリソースは Terraform で管理する。コンソールでの手作業を正の状態としない。Terraform 本体も `mise.toml` で固定する。Cloudflare を含めるかは未決** | [20260816-0017](./adr/20260816-0017-infrastructure-as-code-terraform.md) |
+| G-6 CI | **GitHub Actions（`.github/workflows/ci.yml` の1ジョブ `verify`）。テスト・生成物の作り直し差分（`turbo run build --force` → `git status --porcelain`）・`pnpm audit --audit-level=high` の3つを検証する。トリガは `main` 向けの PR と `main` への push。action はタグで固定し、`setup-node` / `setup-go` は使わず `jdx/mise-action` に寄せる。CD は 007** | [20260830-1435](./adr/20260830-1435-ci-github-actions.md) |
+| G-6' リポジトリとブランチ運用 | **GitHub の public リポジトリ。`main` はルールセット（ID `21846370`）で PR 経由のマージと `verify` の成功を必須にし、オーナーも bypass しない。作業はチケット単位のブランチ** | [20260830-1625](./adr/20260830-1625-public-repository-and-branch-ruleset.md) |
 | B-1 データベース製品 | **v0.1: Neon（シンガポール）→ v1.0前に東京リージョンへ移行** | [20260812-0805](./adr/20260812-0805-database-neon-then-planetscale.md) |
 | C-1 画像の保存先 | **Cloudflare R2**（署名付きURLで直接アップロード） | [20260812-0712](./adr/20260812-0712-infrastructure-cloudflare-aws-hybrid.md) |
 | A-1 フロントのホスティング | Cloudflare（暫定） | [20260812-0712](./adr/20260812-0712-infrastructure-cloudflare-aws-hybrid.md) |
