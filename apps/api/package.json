@@ -2,7 +2,7 @@
   "name": "@repo/api",
   "private": true,
   "scripts": {
-    "build": "mkdir -p dist && GOOS=linux GOARCH=arm64 go build -o dist/bootstrap ./cmd/lambda",
+    "build": "go tool oapi-codegen -config oapi-codegen.yaml ../../packages/api-spec/tsp-output/@typespec/openapi3/openapi.yaml && mkdir -p dist && GOOS=linux GOARCH=arm64 go build -o dist/bootstrap ./cmd/lambda",
     "test": "go test ./..."
   },
   "devDependencies": {

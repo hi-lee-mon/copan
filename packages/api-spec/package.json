@@ -2,7 +2,7 @@
   "name": "@repo/api-spec",
   "private": true,
   "scripts": {
-    "build": "mkdir -p dist && echo built > dist/out.txt",
+    "build": "tsp compile . --emit=@typespec/openapi3",
     "gen": "tsp compile . --emit=@typespec/openapi3"
   },
   "devDependencies": {
