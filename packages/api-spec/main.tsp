@@ -1,7 +1,7 @@
 import "@typespec/http";
 using Http;
 
-@service(#{ title: "Copan API" })
+@service(#{ title: "Copan APi" })
 namespace Copan;
 
 @route("/healthz")

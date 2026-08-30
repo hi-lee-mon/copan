@@ -27,3 +27,15 @@ jobs:
 
       - name: 依存をインストールする
         run: pnpm install
+
+      - name: 生成物を作り直す
+        run: pnpm exec turbo run build --force
+
+      - name: 生成物に差分が無いことを確認する
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "::error::生成物に差分があります" # ::error::はgithubへの命令でログを赤くする
+            git status --porcelain
+            git diff
+            exit 1
+          fi
