@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main] # メインブランチへのプルリクエストのみを対象にする
+  push:
+    branches: [main] # メインブランチへのプッシュのみを対象にする
+
+permissions:
+  contents: read # このワークフローに発行される GITHUB_TOKEN の権限を、リポジトリの読み取りだけに絞る宣言
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: リポジトリを取得する
+        uses: actions/checkout@v7.0.1 # デフォルトのブランチを取得する。github公式のactions
+
+      - name: ツールチェーンを入れる
+        uses: jdx/mise-action@v4.2.5 # mise を使ってツールチェーンを入れる。jdxが作ったmiseのactions
+
+      - name: 入ったバージョンを確認する
+        run: |
+          node -v
+          pnpm -v
+          go version
+
+      - name: 依存をインストールする
+        run: pnpm install
