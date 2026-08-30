@@ -39,3 +39,9 @@ jobs:
             git diff
             exit 1
           fi
+
+      - name: テストを実行する
+        run: pnpm exec turbo run test
+
+      - name: 依存の脆弱性を確認する
+        run: pnpm audit --audit-level=high
