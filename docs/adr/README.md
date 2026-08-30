@@ -60,6 +60,8 @@
 | [2026-08-16 00:17](./20260816-0017-infrastructure-as-code-terraform.md) | Lambda を含む AWS のリソースを Terraform で管理する | 承認 |
 | [2026-08-23 14:23](./20260823-1423-openapi-output-location.md) | 生成した OpenAPI を emitter の既定の出力先に出し、そのままコミットする | 承認（生成タスクの回し方のみ下記で更新） |
 | [2026-08-23 14:53](./20260823-1453-openapi-to-go-codegen.md) | OpenAPI から Go を生成するツールに oapi-codegen を採用し、strict-server まで生成させる | 承認 |
+| [2026-08-30 14:35](./20260830-1435-ci-github-actions.md) | CI を GitHub Actions の1ジョブで回し、テスト・生成物の作り直し差分・`pnpm audit` の3つを検証する | 承認（決定1「private」のみ下記で更新） |
+| [2026-08-30 16:25](./20260830-1625-public-repository-and-branch-ruleset.md) | リポジトリを public にし、`main` へのマージをルールセットで強制する | 承認 |
 
 ## 決定の連鎖
 

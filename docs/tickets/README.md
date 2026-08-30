@@ -30,8 +30,8 @@
 | [002](./002-monorepo-scaffold.md) | Turborepo のモノレポ骨組みを作る | 3h | **着手可能** |
 | [003](./003-go-api-skeleton.md) | Go の API 雛形を作り、ローカルで叩ける状態にする | 3h | **完了**（2026-08-15） |
 | [004](./004-typespec-openapi-health.md) | TypeSpec で `/health` を定義し、OpenAPI を生成する | 2h | **着手可能** |
-| [005](./005-health-from-generated-types.md) | 生成された型から `/healthz` を TDD で実装し、`/ping` を捨てる | 3h | **進行中** |
-| [006](./006-ci-test-and-generated-diff.md) | CI を組み、テストと「生成物の作り直し差分」を機械に検証させる | 3h | **進行中** |
+| [005](./005-health-from-generated-types.md) | 生成された型から `/healthz` を TDD で実装し、`/ping` を捨てる | 3h | **実装完了**（2026-08-30。学習TODO・振り返りの記入が残り） |
+| [006](./006-ci-test-and-generated-diff.md) | CI を組み、テストと「生成物の作り直し差分」を機械に検証させる | 3h | **進行中**（ステップ9まで完了 / 2026-08-30） |
 | 007 | Lambda + Function URL にデプロイする | 3h | 未作成 |
 
 ### 以降（未分割）
