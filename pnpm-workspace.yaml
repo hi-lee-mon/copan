@@ -2,3 +2,9 @@ packages:
   - "apps/*"
   - "packages/*"
 saveExact: true
+preferFrozenLockfile: true
+minimumReleaseAge: 4320
+onlyBuiltDependencies: []
+overrides:
+  fast-uri: 3.1.8
+  undici: 7.29.1
